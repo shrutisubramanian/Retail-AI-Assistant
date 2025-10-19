@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MobileChat from "./pages/MobileChat";
+import VIPChat from "./pages/VIPChat";
 import Kiosk from "./pages/Kiosk";
 import NotFound from "./pages/NotFound";
 
@@ -19,6 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/mobile" element={<MobileChat />} />
+          <Route path="/vip" element={<VIPChat />} />
           <Route path="/kiosk" element={<Kiosk />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -50,6 +50,26 @@ export const products: Product[] = [
     inStock: true,
     stockCount: 2,
   },
+  {
+    id: "luxury-handbag",
+    name: "Madison Leather Handbag",
+    price: 589,
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&h=1200&fit=crop",
+    description: "Sophisticated Italian leather handbag in cognac brown",
+    category: "accessories",
+    inStock: true,
+    stockCount: 4,
+  },
+  {
+    id: "matching-wallet",
+    name: "Classic Leather Wallet",
+    price: 129,
+    image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&h=1200&fit=crop",
+    description: "Matching leather wallet with RFID protection",
+    category: "accessories",
+    inStock: true,
+    stockCount: 8,
+  },
 ];
 
 export interface Message {

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { Smartphone, Monitor, ArrowRight, Sparkles, ShoppingBag, MessageSquare } from "lucide-react";
+import { Smartphone, Monitor, ArrowRight, Sparkles, ShoppingBag, MessageSquare, Crown } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Index = () => {
       {/* Journey Cards */}
       <div className="px-6 pb-16">
         <div className="mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Mobile Chat Card */}
             <Card className="shadow-elegant hover:shadow-glow transition-all group cursor-pointer" onClick={() => navigate("/mobile")}>
               <CardContent className="p-8 space-y-6">
@@ -67,6 +67,48 @@ const Index = () => {
 
                 <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
                   Start Mobile Experience
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* VIP Journey Card */}
+            <Card className="shadow-glow hover:shadow-glow border-2 border-agent-loyalty/30 bg-gradient-to-br from-agent-loyalty/10 to-card transition-all group cursor-pointer" onClick={() => navigate("/vip")}>
+              <CardContent className="p-8 space-y-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary">
+                    <Crown className="h-7 w-7 text-white" />
+                  </div>
+                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-bold">VIP Customer Journey</h2>
+                    <Badge variant="secondary" className="text-xs">Featured</Badge>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Follow Mark, a Gold Tier member, through a seamless agent-orchestrated experience with specialized Worker Agents handling each step.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Crown className="h-4 w-4 text-agent-loyalty" />
+                    <span className="text-muted-foreground">Gold Tier benefits & orchestration</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <ShoppingBag className="h-4 w-4 text-agent-recommendation" />
+                    <span className="text-muted-foreground">Recommendation → Inventory → Payment</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Sparkles className="h-4 w-4 text-agent-sales" />
+                    <span className="text-muted-foreground">Post-purchase support & feedback</span>
+                  </div>
+                </div>
+
+                <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                  Start VIP Experience
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </CardContent>
