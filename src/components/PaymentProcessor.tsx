@@ -9,15 +9,31 @@ interface PaymentProcessorProps {
 
 export const PaymentProcessor = ({ amount, onSuccess }: PaymentProcessorProps) => {
   const [status, setStatus] = useState<"processing" | "success" | "failed">("processing");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate payment processing
+    // Simulate payment processing with progress
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 200);
+
     const timer = setTimeout(() => {
+      clearInterval(progressInterval);
+      setProgress(100);
       setStatus("success");
       setTimeout(onSuccess, 1500);
     }, 2000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(progressInterval);
+    };
   }, [onSuccess]);
 
   return (
@@ -31,20 +47,37 @@ export const PaymentProcessor = ({ amount, onSuccess }: PaymentProcessorProps) =
 
       <div className="text-center py-6">
         {status === "processing" && (
-          <div className="space-y-3">
-            <div className="h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-            <p className="text-sm font-medium">Processing payment of ${amount.toFixed(2)}...</p>
-            <p className="text-xs text-muted-foreground">Please wait while we secure your transaction</p>
+          <div className="space-y-4">
+            <div className="relative h-12 w-12 mx-auto">
+              <div className="h-12 w-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Processing payment...</p>
+              <p className="text-lg font-bold text-primary">${amount.toFixed(2)}</p>
+            </div>
+            {/* Progress bar */}
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+              <div 
+                className="bg-primary h-full transition-all duration-200 ease-out"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">Securing your transaction...</p>
           </div>
         )}
 
         {status === "success" && (
-          <div className="space-y-3 animate-scale-in">
-            <div className="h-12 w-12 mx-auto rounded-full bg-green-500/10 flex items-center justify-center">
-              <Check className="h-6 w-6 text-green-600" />
+          <div className="space-y-3">
+            <div className="relative h-16 w-16 mx-auto">
+              <div className="absolute inset-0 h-16 w-16 rounded-full bg-green-500/10 animate-ping" />
+              <div className="relative h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center">
+                <Check className="h-8 w-8 text-green-600 animate-scale-in" />
+              </div>
             </div>
-            <p className="text-sm font-medium text-green-600">Payment Successful!</p>
-            <p className="text-xs text-muted-foreground">Your order has been confirmed</p>
+            <div className="space-y-1">
+              <p className="text-base font-bold text-green-600">Payment Successful!</p>
+              <p className="text-xs text-muted-foreground">Order #VIP2024-10192045 confirmed</p>
+            </div>
           </div>
         )}
 
@@ -54,7 +87,7 @@ export const PaymentProcessor = ({ amount, onSuccess }: PaymentProcessorProps) =
               <AlertCircle className="h-6 w-6 text-destructive" />
             </div>
             <p className="text-sm font-medium text-destructive">Payment Failed</p>
-            <p className="text-xs text-muted-foreground">Please check your payment method and try again</p>
+            <p className="text-xs text-muted-foreground">Please try again or use a different payment method</p>
             <Button variant="outline" className="mt-2">
               Retry Payment
             </Button>

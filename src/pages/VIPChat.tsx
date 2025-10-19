@@ -19,10 +19,11 @@ export default function VIPChat() {
     {
       id: "1",
       agent: "sales",
-      content: "Welcome back, Mark! As a valued Gold Tier member, I'm here to help you find the perfect gift. I noticed you've been browsing our accessories collection. What's the occasion?",
+      content: "Hi Mark! 👋 As a Gold Tier member, I'm here to help. I noticed you've been browsing our accessories collection. Need help finding a last-minute gift for your wife? Let's get you something special.",
       timestamp: new Date(Date.now() - 120000),
     },
   ]);
+  const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
@@ -39,13 +40,15 @@ export default function VIPChat() {
           },
         ]);
 
+        setIsTyping(true);
         setTimeout(() => {
+          setIsTyping(false);
           setMessages((prev) => [
             ...prev,
             {
               id: "3",
               agent: "sales",
-              content: "Perfect! Let me route this to our Recommendation Agent who specializes in curating gift selections based on your preferences and past purchases.",
+              content: "Perfect! Let me check the best options for you... I'm connecting you with our Recommendation Agent who specializes in curating gift selections based on your preferences and past purchases.",
               timestamp: new Date(),
             },
           ]);
@@ -66,9 +69,10 @@ export default function VIPChat() {
         timestamp: new Date(),
       },
     ]);
-    setCurrentStep("inventory");
-
+    setIsTyping(true);
     setTimeout(() => {
+      setIsTyping(false);
+      setCurrentStep("inventory");
       setMessages((prev) => [
         ...prev,
         {
@@ -96,7 +100,9 @@ export default function VIPChat() {
           },
         ]);
 
+        setIsTyping(true);
         setTimeout(() => {
+          setIsTyping(false);
           setMessages((prev) => [
             ...prev,
             {
@@ -107,7 +113,7 @@ export default function VIPChat() {
             },
           ]);
           setSelectedProducts(prev => [...prev, wallet]);
-        }, 1000);
+        }, 1500);
 
         setTimeout(() => {
           setMessages((prev) => [
@@ -120,7 +126,9 @@ export default function VIPChat() {
             },
           ]);
 
+          setIsTyping(true);
           setTimeout(() => {
+            setIsTyping(false);
             setMessages((prev) => [
               ...prev,
               {
@@ -131,7 +139,7 @@ export default function VIPChat() {
               },
             ]);
             setCurrentStep("checkout");
-          }, 1000);
+          }, 1500);
         }, 2000);
       }
     }
@@ -148,7 +156,9 @@ export default function VIPChat() {
       },
     ]);
 
+    setIsTyping(true);
     setTimeout(() => {
+      setIsTyping(false);
       setMessages((prev) => [
         ...prev,
         {
@@ -194,6 +204,16 @@ export default function VIPChat() {
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}
+
+        {isTyping && (
+          <div className="flex items-center gap-2 px-4 py-3 bg-card rounded-2xl w-fit max-w-[80%] border border-border/50">
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+          </div>
+        )}
 
         {currentStep === "recommendation" && (
           <RecommendationCard

@@ -9,6 +9,15 @@ interface InventoryWidgetProps {
 
 export const InventoryWidget = ({ productName, onReserve }: InventoryWidgetProps) => {
   const [selectedSlot, setSelectedSlot] = useState<string>("today-2pm");
+  const [showDetails, setShowDetails] = useState(false);
+
+  const timeSlots = [
+    { value: "today-2pm", label: "Today at 2:00 PM", available: true },
+    { value: "today-4pm", label: "Today at 4:00 PM", available: true },
+    { value: "today-6pm", label: "Today at 6:00 PM", available: false },
+    { value: "tomorrow-10am", label: "Tomorrow at 10:00 AM", available: true },
+    { value: "tomorrow-2pm", label: "Tomorrow at 2:00 PM", available: true },
+  ];
 
   return (
     <div className="rounded-xl border-2 border-agent-inventory/20 bg-gradient-to-br from-agent-inventory/5 to-transparent p-4 shadow-elegant animate-fade-in">
@@ -16,48 +25,89 @@ export const InventoryWidget = ({ productName, onReserve }: InventoryWidgetProps
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-agent-inventory/10">
           <Package className="h-4 w-4 text-agent-inventory" />
         </div>
-        <span className="text-sm font-semibold text-agent-inventory">Inventory & Fulfillment</span>
+        <span className="text-sm font-semibold text-agent-inventory">Inventory & Fulfillment Agent</span>
       </div>
       
       <p className="text-sm text-muted-foreground mb-4">
-        Great news! The {productName} is available through multiple fulfillment options:
+        Great news! The {productName} is available:
       </p>
 
       <div className="space-y-3">
+        {/* Online Stock */}
         <div className="rounded-lg border border-border bg-card p-3">
-          <div className="flex items-start gap-3">
-            <Truck className="h-5 w-5 text-agent-inventory mt-0.5" />
-            <div className="flex-1">
-              <div className="font-medium text-sm">Ship to Home</div>
-              <div className="text-xs text-muted-foreground mt-1">In Stock - Delivery in 2-3 days</div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-start gap-3 flex-1">
+              <Truck className="h-5 w-5 text-agent-inventory mt-0.5" />
+              <div className="flex-1">
+                <div className="font-medium text-sm">Online Stock</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-xs text-green-600 font-medium">✅ Available</span>
+                  <span className="text-xs text-muted-foreground">Ship to Home (2-3 days)</span>
+                </div>
+              </div>
             </div>
             <Button size="sm" variant="outline" onClick={() => onReserve("ship")}>
-              Select
+              Ship
             </Button>
           </div>
         </div>
 
+        {/* Store Stock */}
         <div className="rounded-lg border-2 border-agent-inventory/30 bg-agent-inventory/5 p-3">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 mb-3">
             <Store className="h-5 w-5 text-agent-inventory mt-0.5" />
             <div className="flex-1">
-              <div className="font-medium text-sm">Click & Collect</div>
-              <div className="text-xs text-muted-foreground mt-1">Available at 3/5 nearby stores</div>
-              <div className="mt-3 space-y-2">
-                <label className="text-xs font-medium">Select pickup time:</label>
-                <select
-                  value={selectedSlot}
-                  onChange={(e) => setSelectedSlot(e.target.value)}
-                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
-                >
-                  <option value="today-2pm">Today at 2:00 PM</option>
-                  <option value="today-4pm">Today at 4:00 PM</option>
-                  <option value="tomorrow-10am">Tomorrow at 10:00 AM</option>
-                  <option value="tomorrow-2pm">Tomorrow at 2:00 PM</option>
-                </select>
+              <div className="font-medium text-sm">Store Stock</div>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-xs text-green-600 font-medium">🏬 In 3 Nearby Stores</span>
               </div>
             </div>
           </div>
+
+          {/* Slot Picker */}
+          <div className="space-y-2">
+            <button
+              onClick={() => setShowDetails(!showDetails)}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-md border border-border bg-background text-sm"
+            >
+              <span className="text-muted-foreground">
+                🕒 {timeSlots.find(s => s.value === selectedSlot)?.label}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {showDetails ? '▲' : '▼'}
+              </span>
+            </button>
+
+            {showDetails && (
+              <div className="space-y-1 animate-fade-in">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot.value}
+                    disabled={!slot.available}
+                    onClick={() => {
+                      setSelectedSlot(slot.value);
+                      setShowDetails(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
+                      slot.value === selectedSlot
+                        ? 'bg-agent-inventory/10 border border-agent-inventory/30'
+                        : slot.available
+                        ? 'bg-background border border-border hover:bg-muted/50'
+                        : 'bg-muted/30 text-muted-foreground cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span>{slot.label}</span>
+                      {!slot.available && (
+                        <span className="text-xs text-destructive">Full</span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Button className="w-full mt-3" onClick={() => onReserve("pickup")}>
             Reserve for Pickup
           </Button>

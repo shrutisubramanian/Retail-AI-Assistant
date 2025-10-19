@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Gift, Tag } from "lucide-react";
+import { Gift, Tag, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 interface CheckoutSummaryProps {
   subtotal: number;
@@ -14,6 +15,7 @@ export const CheckoutSummary = ({
   couponDiscount, 
   onProceedPayment 
 }: CheckoutSummaryProps) => {
+  const [showBreakdown, setShowBreakdown] = useState(true);
   const totalSavings = goldDiscount + couponDiscount;
   const finalPrice = subtotal - totalSavings;
 
@@ -30,38 +32,47 @@ export const CheckoutSummary = ({
         Your Gold Tier benefits have been applied:
       </p>
 
-      <div className="space-y-2 mb-4">
-        <div className="flex justify-between text-sm">
-          <span>Subtotal:</span>
-          <span className="font-medium">${subtotal.toFixed(2)}</span>
+      {/* Summary header - always visible */}
+      <div className="rounded-lg bg-card border-2 border-primary/20 p-3 mb-3">
+        <div className="flex justify-between items-center">
+          <span className="text-sm font-medium">Final Price</span>
+          <span className="text-2xl font-bold text-primary">${finalPrice.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-sm text-agent-loyalty">
-          <span className="flex items-center gap-1">
-            <Tag className="h-3 w-3" />
-            Gold Tier Discount (15%):
-          </span>
-          <span className="font-medium">-${goldDiscount.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between text-sm text-agent-loyalty">
-          <span className="flex items-center gap-1">
-            <Tag className="h-3 w-3" />
-            Coupon Applied:
-          </span>
-          <span className="font-medium">-${couponDiscount.toFixed(2)}</span>
-        </div>
-        <div className="border-t border-border pt-2 mt-2">
-          <div className="flex justify-between text-sm font-medium text-green-600">
-            <span>Total Savings:</span>
-            <span>${totalSavings.toFixed(2)}</span>
-          </div>
-        </div>
-        <div className="border-t-2 border-border pt-2 mt-2">
-          <div className="flex justify-between text-lg font-bold">
-            <span>Final Price:</span>
-            <span className="text-primary">${finalPrice.toFixed(2)}</span>
-          </div>
+        <div className="flex justify-between items-center mt-1">
+          <span className="text-xs text-muted-foreground">You saved ${totalSavings.toFixed(2)}</span>
+          <button
+            onClick={() => setShowBreakdown(!showBreakdown)}
+            className="text-xs text-primary flex items-center gap-1"
+          >
+            {showBreakdown ? 'Hide' : 'Show'} details
+            <ChevronDown className={`h-3 w-3 transition-transform ${showBreakdown ? 'rotate-180' : ''}`} />
+          </button>
         </div>
       </div>
+
+      {/* Collapsible breakdown */}
+      {showBreakdown && (
+        <div className="space-y-2 mb-4 animate-fade-in">
+          <div className="flex justify-between text-sm">
+            <span>Subtotal</span>
+            <span className="font-medium">${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-sm text-green-600">
+            <span className="flex items-center gap-1">
+              <Tag className="h-3 w-3" />
+              Gold Tier (15%)
+            </span>
+            <span className="font-medium">-${goldDiscount.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-sm text-green-600">
+            <span className="flex items-center gap-1">
+              <Tag className="h-3 w-3" />
+              Coupon Code
+            </span>
+            <span className="font-medium">-${couponDiscount.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
 
       <Button className="w-full" size="lg" onClick={onProceedPayment}>
         Proceed to Payment
