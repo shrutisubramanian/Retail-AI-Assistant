@@ -254,17 +254,45 @@ export default function VIPChat() {
       </div>
 
       <div className="border-t border-border bg-card p-4">
-        <div className="flex gap-2">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          if (inputValue.trim()) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `${Date.now()}-user`,
+                agent: "user",
+                content: inputValue,
+                timestamp: new Date(),
+              },
+            ]);
+            setInputValue("");
+            
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `${Date.now()}-sales`,
+                  agent: "sales",
+                  content: "Thank you for your message! I'm here to help you with your shopping needs.",
+                  timestamp: new Date(),
+                },
+              ]);
+            }, 1000);
+          }
+        }} className="flex gap-2">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type a message..."
             className="flex-1"
           />
-          <Button size="icon" disabled={!inputValue.trim()}>
+          <Button type="submit" size="icon" disabled={!inputValue.trim()}>
             <Send className="h-4 w-4" />
           </Button>
-        </div>
+        </form>
       </div>
     </div>
   );

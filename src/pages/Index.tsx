@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { Smartphone, Monitor, ArrowRight, Sparkles, ShoppingBag, MessageSquare, Crown } from "lucide-react";
+import { Monitor, ArrowRight, Sparkles, ShoppingBag, MessageSquare, Crown } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Index = () => {
               <span className="block text-accent mt-2">Experience Prototype</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore Sarah's journey as she discovers the perfect formal dress through our AI-powered Sales Agent and Worker Agents, seamlessly transitioning from mobile chat to in-store kiosk.
+              Experience AI-powered retail through our Sales Agent and Worker Agents, showcasing seamless orchestration from product discovery to post-purchase support.
             </p>
           </div>
         </div>
@@ -32,46 +32,7 @@ const Index = () => {
       {/* Journey Cards */}
       <div className="px-6 pb-16">
         <div className="mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Mobile Chat Card */}
-            <Card className="shadow-elegant hover:shadow-glow transition-all group cursor-pointer" onClick={() => navigate("/mobile")}>
-              <CardContent className="p-8 space-y-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary">
-                    <Smartphone className="h-7 w-7 text-white" />
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
-                </div>
-                
-                <div className="space-y-3">
-                  <h2 className="text-2xl font-bold">Mobile Chat Experience</h2>
-                  <p className="text-muted-foreground">
-                    Start Sarah's journey on the mobile app. Interact with the Sales Agent, receive personalized recommendations, and check local inventory.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MessageSquare className="h-4 w-4 text-agent-sales" />
-                    <span className="text-muted-foreground">Sales Agent welcome & context</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ShoppingBag className="h-4 w-4 text-agent-recommendation" />
-                    <span className="text-muted-foreground">Product recommendations & upsell</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Sparkles className="h-4 w-4 text-agent-inventory" />
-                    <span className="text-muted-foreground">Real-time inventory check</span>
-                  </div>
-                </div>
-
-                <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                  Start Mobile Experience
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-
+          <div className="grid md:grid-cols-2 gap-6">
             {/* VIP Journey Card */}
             <Card className="shadow-glow hover:shadow-glow border-2 border-agent-loyalty/30 bg-gradient-to-br from-agent-loyalty/10 to-card transition-all group cursor-pointer" onClick={() => navigate("/vip")}>
               <CardContent className="p-8 space-y-6">

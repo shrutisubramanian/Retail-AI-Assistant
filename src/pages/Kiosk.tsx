@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { conversationHistory, Message, products } from "@/data/mockData";
-import { Store, Clock, Tag, Sparkles, CheckCircle2 } from "lucide-react";
+import { Store, Clock, Tag, Sparkles, CheckCircle2, Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Kiosk() {
@@ -21,6 +22,7 @@ export default function Kiosk() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showLoyalty, setShowLoyalty] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   const handleConfirm = () => {
     setShowConfirmation(true);
@@ -207,6 +209,47 @@ export default function Kiosk() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Chat Input */}
+        <div className="border-t border-border bg-card p-6">
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (inputValue.trim()) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `${Date.now()}-user`,
+                  agent: "user",
+                  content: inputValue,
+                  timestamp: new Date(),
+                },
+              ]);
+              setInputValue("");
+              
+              setTimeout(() => {
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: `${Date.now()}-sales`,
+                    agent: "sales",
+                    content: "Thank you! I'm here to assist you with your reservation.",
+                    timestamp: new Date(),
+                  },
+                ]);
+              }, 1000);
+            }
+          }} className="flex gap-2 max-w-2xl mx-auto">
+            <Input
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Type a message..."
+              className="flex-1"
+            />
+            <Button type="submit" size="icon" disabled={!inputValue.trim()}>
+              <Send className="h-4 w-4" />
+            </Button>
+          </form>
         </div>
       </div>
     </div>
