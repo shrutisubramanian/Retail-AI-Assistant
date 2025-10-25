@@ -1,168 +1,173 @@
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
-import { Monitor, ArrowRight, Sparkles, ShoppingBag, MessageSquare, Crown } from "lucide-react";
+import {
+  Smartphone,
+  Monitor,
+  ArrowRight,
+  Sparkles,
+  ShoppingBag,
+  MessageSquare,
+  Crown,
+  CreditCard,
+  PackageX,
+  Gift,
+  QrCode,
+} from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  /* ------- omnichannel deep-link ------- */
+  useEffect(() => {
+    const sid = searchParams.get("sessionId");
+    if (sid) localStorage.setItem("sessionId", sid); // simple store for now
+    const ch = searchParams.get("channel") || "web";
+    localStorage.setItem("channel", ch);
+  }, [searchParams]);
+
+  const scenarios = [
+    {
+      id: "mobile-to-kiosk",
+      title: "Mobile Chat Experience",
+      description:
+        "Start Sarah's journey on mobile, scan QR at kiosk → conversation continues instantly.",
+      icon: Smartphone,
+      route: "/mobile",
+      color: "bg-blue-500",
+      features: [
+        { icon: MessageSquare, text: "Sales Agent welcome & context", color: "text-agent-sales" },
+        { icon: ShoppingBag, text: "Product recommendations & upsell", color: "text-agent-recommendation" },
+        { icon: Sparkles, text: "Real-time inventory check", color: "text-agent-inventory" },
+      ],
+    },
+    {
+      id: "vip-journey",
+      title: "VIP Customer Journey",
+      description: "Gold-tier orchestration: recommendation → inventory → payment → support.",
+      icon: Crown,
+      route: "/vip",
+      color: "bg-gradient-primary",
+      featured: true,
+      features: [
+        { icon: Crown, text: "Gold Tier benefits & orchestration", color: "text-agent-loyalty" },
+        { icon: ShoppingBag, text: "End-to-end Worker-Agent flow", color: "text-agent-recommendation" },
+        { icon: Sparkles, text: "Post-purchase support & feedback", color: "text-agent-sales" },
+      ],
+    },
+    {
+      id: "kiosk",
+      title: "In-Store Kiosk",
+      description: "Scan QR, see full history, apply loyalty, reserve slot.",
+      icon: Monitor,
+      route: "/kiosk",
+      color: "bg-orange-500",
+      features: [
+        { icon: QrCode, text: "Seamless QR hand-off", color: "text-agent-sales" },
+        { icon: Gift, text: "Loyalty points & coupon auto-applied", color: "text-agent-loyalty" },
+        { icon: PackageX, text: "Reserve pickup slot", color: "text-agent-inventory" },
+      ],
+    },
+    {
+      id: "payment-failure",
+      title: "Payment Failure Recovery",
+      description: "Declined card → Agent offers 1-tap retry with alternative methods.",
+      icon: CreditCard,
+      route: "/payment-failure",
+      color: "bg-yellow-500",
+      badge: "Edge Case",
+      features: [
+        { icon: CreditCard, text: "Simulate decline & retry", color: "text-yellow-600" },
+        { icon: Sparkles, text: "Alternative payment suggestions", color: "text-agent-payment" },
+        { icon: MessageSquare, text: "Graceful recovery flow", color: "text-agent-sales" },
+      ],
+    },
+    {
+      id: "out-of-stock",
+      title: "Out of Stock Alternative",
+      description: "Inventory + Recommendation Agents surface 3 in-stock alternatives.",
+      icon: PackageX,
+      route: "/out-of-stock",
+      color: "bg-red-500",
+      badge: "Edge Case",
+      features: [
+        { icon: PackageX, text: "Real-time stock check", color: "text-agent-inventory" },
+        { icon: ShoppingBag, text: "Smart alternative carousel", color: "text-agent-recommendation" },
+        { icon: Sparkles, text: "Instant fulfillment options", color: "text-agent-inventory" },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      {/* Hero Section */}
+      {/* ------- Hero ------- */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-primary opacity-10" />
         <div className="relative px-6 py-16 md:py-24">
           <div className="mx-auto max-w-4xl text-center space-y-6">
             <Badge variant="secondary" className="gap-2 px-4 py-2">
               <Sparkles className="h-4 w-4" />
-              Interactive Prototype Demo
+              Agentic AI Demo — Omnichannel
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              Omnichannel Shopping
-              <span className="block text-accent mt-2">Experience Prototype</span>
+              Conversational Sales Agent
+              <span className="block text-accent mt-2">Across Every Channel</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Experience AI-powered retail through our Sales Agent and Worker Agents, showcasing seamless orchestration from product discovery to post-purchase support.
+              Scan, switch, and shop. One session lives across mobile, kiosk, WhatsApp, and web.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Journey Cards */}
+      {/* ------- Scenario Cards ------- */}
       <div className="px-6 pb-16">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* VIP Journey Card */}
-            <Card className="shadow-glow hover:shadow-glow border-2 border-agent-loyalty/30 bg-gradient-to-br from-agent-loyalty/10 to-card transition-all group cursor-pointer" onClick={() => navigate("/vip")}>
-              <CardContent className="p-8 space-y-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary">
-                    <Crown className="h-7 w-7 text-white" />
+        <div className="mx-auto max-w-7xl">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {scenarios.map((s) => (
+              <Card
+                key={s.id}
+                className={`shadow-elegant hover:shadow-glow transition-all group cursor-pointer ${
+                  s.featured ? "md:col-span-2 lg:col-span-1 shadow-glow border-2 border-agent-loyalty/30 bg-gradient-to-br from-agent-loyalty/10 to-card" : ""
+                }`}
+                onClick={() => navigate(s.route)}
+              >
+                <CardContent className="p-6 space-y-6">
+                  <div className="flex items-start justify-between">
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${s.color}`}>
+                      <s.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {s.badge && <Badge variant="secondary">{s.badge}</Badge>}
+                      {s.featured && <Badge variant="secondary">Featured</Badge>}
+                      <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+                    </div>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-bold">VIP Customer Journey</h2>
-                    <Badge variant="secondary" className="text-xs">Featured</Badge>
-                  </div>
-                  <p className="text-muted-foreground">
-                    Follow Mark, a Gold Tier member, through a seamless agent-orchestrated experience with specialized Worker Agents handling each step.
-                  </p>
-                </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Crown className="h-4 w-4 text-agent-loyalty" />
-                    <span className="text-muted-foreground">Gold Tier benefits & orchestration</span>
+                  <div className="space-y-3">
+                    <h2 className="text-xl font-bold">{s.title}</h2>
+                    <p className="text-sm text-muted-foreground">{s.description}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ShoppingBag className="h-4 w-4 text-agent-recommendation" />
-                    <span className="text-muted-foreground">Recommendation → Inventory → Payment</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Sparkles className="h-4 w-4 text-agent-sales" />
-                    <span className="text-muted-foreground">Post-purchase support & feedback</span>
-                  </div>
-                </div>
 
-                <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                  Start VIP Experience
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Kiosk Card */}
-            <Card className="shadow-elegant hover:shadow-glow transition-all group cursor-pointer" onClick={() => navigate("/kiosk")}>
-              <CardContent className="p-8 space-y-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary">
-                    <Monitor className="h-7 w-7 text-white" />
+                  <div className="space-y-2">
+                    {s.features.map((f, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm">
+                        <f.icon className={`h-4 w-4 ${f.color}`} />
+                        <span className="text-muted-foreground">{f.text}</span>
+                      </div>
+                    ))}
                   </div>
-                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
-                </div>
-                
-                <div className="space-y-3">
-                  <h2 className="text-2xl font-bold">In-Store Kiosk</h2>
-                  <p className="text-muted-foreground">
-                    Experience the seamless channel switch. View full conversation history and complete the reservation with loyalty benefits applied.
-                  </p>
-                </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MessageSquare className="h-4 w-4 text-agent-sales" />
-                    <span className="text-muted-foreground">Persistent conversation history</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Sparkles className="h-4 w-4 text-agent-loyalty" />
-                    <span className="text-muted-foreground">Loyalty points & coupon application</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ShoppingBag className="h-4 w-4 text-agent-inventory" />
-                    <span className="text-muted-foreground">Reservation confirmation</span>
-                  </div>
-                </div>
-
-                <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                  View Kiosk Interface
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Features Overview */}
-          <div className="mt-16 text-center space-y-8">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Key Features Demonstrated</h3>
-              <p className="text-muted-foreground">This prototype showcases the power of agentic AI in retail</p>
-            </div>
-
-            <div className="grid md:grid-cols-4 gap-6">
-              <Card className="shadow-elegant">
-                <CardContent className="p-6 text-center space-y-3">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-agent-sales/10">
-                    <MessageSquare className="h-6 w-6 text-agent-sales" />
-                  </div>
-                  <h4 className="font-semibold">Contextual Sales</h4>
-                  <p className="text-sm text-muted-foreground">AI remembers customer preferences and browsing history</p>
+                  <Button className="w-full gap-2 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                    Start Experience
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
-
-              <Card className="shadow-elegant">
-                <CardContent className="p-6 text-center space-y-3">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-agent-recommendation/10">
-                    <ShoppingBag className="h-6 w-6 text-agent-recommendation" />
-                  </div>
-                  <h4 className="font-semibold">Smart Recommendations</h4>
-                  <p className="text-sm text-muted-foreground">Curated product suggestions with upselling opportunities</p>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-elegant">
-                <CardContent className="p-6 text-center space-y-3">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-agent-inventory/10">
-                    <Sparkles className="h-6 w-6 text-agent-inventory" />
-                  </div>
-                  <h4 className="font-semibold">Omnichannel Flow</h4>
-                  <p className="text-sm text-muted-foreground">Seamless transition between mobile and in-store</p>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-elegant">
-                <CardContent className="p-6 text-center space-y-3">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-agent-loyalty/10">
-                    <Sparkles className="h-6 w-6 text-agent-loyalty" />
-                  </div>
-                  <h4 className="font-semibold">Loyalty Integration</h4>
-                  <p className="text-sm text-muted-foreground">Automatic discount and points application</p>
-                </CardContent>
-              </Card>
-            </div>
+            ))}
           </div>
         </div>
       </div>
