@@ -122,7 +122,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
       {/* ------- Scenario Cards ------- */}
       <div className="px-6 pb-16">
         <div className="mx-auto max-w-7xl">
