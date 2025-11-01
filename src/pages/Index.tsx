@@ -15,6 +15,7 @@ import {
   PackageX,
   Gift,
   QrCode,
+  Mic,
 } from "lucide-react";
 
 const Index = () => {
@@ -30,6 +31,21 @@ const Index = () => {
   }, [searchParams]);
 
   const scenarios = [
+    {
+      id: "voice-assistant",
+      title: "Voice Shopping Assistant",
+      description:
+        "Speak naturally to browse products, check prices, and complete purchases with voice commands.",
+      icon: Mic,
+      route: "/voice-assistant",
+      color: "bg-purple-500",
+      featured: true,
+      features: [
+        { icon: Mic, text: "Natural voice recognition", color: "text-purple-600" },
+        { icon: ShoppingBag, text: "Instant product search & pricing", color: "text-agent-recommendation" },
+        { icon: CreditCard, text: "Voice-activated checkout", color: "text-agent-payment" },
+      ],
+    },
     {
       id: "mobile-to-kiosk",
       title: "Mobile Chat Experience",

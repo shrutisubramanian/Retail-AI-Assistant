@@ -9,6 +9,7 @@ import VIPChat from "./pages/VIPChat";
 import Kiosk from "./pages/Kiosk";
 import PaymentFailure from "./pages/PaymentFailure";
 import OutOfStock from "./pages/OutOfStock";
+import VoiceAssistant from "./pages/VoiceAssistant";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/vip" element={<VIPChat />} />
           <Route path="/kiosk" element={<Kiosk />} />
           <Route path="/payment-failure" element={<PaymentFailure />} />
+          <Route path="/voice-assistant" element={<VoiceAssistant />} />
           <Route path="/out-of-stock" element={<OutOfStock />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
